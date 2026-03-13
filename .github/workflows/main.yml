@@ -15,7 +15,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Setup Cloudflared
         uses: AnimMouse/setup-cloudflared@v2
