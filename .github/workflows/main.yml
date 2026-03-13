@@ -1,0 +1,33 @@
+name: Start Wii Hacks Guide
+on: [push]
+
+jobs:
+  serve:
+    runs-on: ubuntu-latest # You can also use macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Setup Cloudflared
+        uses: [AnimMouse/setup-cloudflared@v2](https://github.com/marketplace/actions/setup-cloudflared)
+
+      - name: Start Site and Tunnel
+        run: |
+          # Start the dev server in the background
+          npm run docs:dev &
+          
+          # Wait a few seconds for the server to be ready
+          sleep 10
+          
+          # Start the Cloudflare Tunnel
+          # Replace 5173 with your actual port
+          cloudflared tunnel --url http://localhost:5173
